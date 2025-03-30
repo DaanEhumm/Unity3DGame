@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    [SerializeField] private bool isShooting, readyToShoot;
+    [SerializeField] private bool allowReset = true;
+    [SerializeField] private float shootingDelay = 2f;
 
-    public bool isShooting, readyToShoot;
-    bool allowReset = true;
-    public float shootingDelay = 2f;
+    [SerializeField] private int bulletsPerBurts = 3;
+    [SerializeField] private int BurstBulletsLeft;
 
-    public int bulletsPerBurts = 3;
-    public int BurstBulletsLeft;
+    [SerializeField] private float spreadIntensity;
 
-    public float spreadIntensity;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform bulletSpawn;
+    [SerializeField] private float bulletVelocity = 30f;
+    [SerializeField] private float bulletPrefabLifeTime = 3f;
 
-
-    public GameObject bulletPrefab;
-    public Transform bulletSpawn;
-    public float bulletVelocity = 30f;
-    public float bulletPrefabLifeTime = 3f;
+    [SerializeField] private GameObject MuzzleEffect;
+    private Animator animator;
 
     public enum ShootingMode
     {
@@ -27,12 +28,15 @@ public class Weapon : MonoBehaviour
         Auto
     }
 
-    public ShootingMode currentShootingmode;
+    [SerializeField] private ShootingMode currentShootingmode;
+
     private void Awake()
     {
         readyToShoot = true;
         BurstBulletsLeft = bulletsPerBurts;
+        animator = GetComponent<Animator>();
     }
+
     void Update()
     {
         if (currentShootingmode == ShootingMode.Auto)
@@ -56,7 +60,12 @@ public class Weapon : MonoBehaviour
 
     private void FireWeapon()
     {
+        MuzzleEffect.GetComponent<ParticleSystem>().Play();
+        animator.SetTrigger("RECOIL");
+        SoundManager.instance.shootingSoundGlock.Play();
+
         readyToShoot = false;
+
         Vector3 shootDirection = CalculateDirectionAndSpread().normalized;
 
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
@@ -75,6 +84,7 @@ public class Weapon : MonoBehaviour
             Invoke("FireWeapon", shootingDelay);
         }
     }
+
     private void ResetShot()
     {
         readyToShoot = true;
@@ -98,9 +108,8 @@ public class Weapon : MonoBehaviour
         Vector3 direction = targetPoint - bulletSpawn.position;
         float x = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
         float y = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
-        
-        return direction + new Vector3(x, y, 0);
 
+        return direction + new Vector3(x, y, 0);
     }
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float delay)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class BeerBottle : MonoBehaviour
 {
-    public List<Rigidbody> allParts = new List<Rigidbody>();
+    [SerializeField] private List<Rigidbody> allParts = new List<Rigidbody>();
 
     public void Shatter()
     {

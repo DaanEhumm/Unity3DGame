@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
     [SerializeField] private bool isShooting, readyToShoot;
-    [SerializeField] private bool allowReset = true;
+    private bool allowReset = true;
     [SerializeField] private float shootingDelay = 2f;
 
     [SerializeField] private int bulletsPerBurts = 3;
@@ -21,6 +22,10 @@ public class Weapon : MonoBehaviour
     [SerializeField] private GameObject MuzzleEffect;
     private Animator animator;
 
+    [SerializeField] private float reloadTime;
+    [SerializeField] private int magazineSize, bulletsLeft;
+    public bool isReloading;
+
     public enum ShootingMode
     {
         Single,
@@ -35,6 +40,8 @@ public class Weapon : MonoBehaviour
         readyToShoot = true;
         BurstBulletsLeft = bulletsPerBurts;
         animator = GetComponent<Animator>();
+
+        bulletsLeft = magazineSize;
     }
 
     void Update()
@@ -51,18 +58,32 @@ public class Weapon : MonoBehaviour
         {
             isShooting = Input.GetKeyDown(KeyCode.Mouse0);
         }
-        if (readyToShoot && isShooting)
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !isReloading)
+        {
+            Reload();
+        }
+        if (readyToShoot && isShooting && bulletsLeft > 0)
         {
             BurstBulletsLeft = bulletsPerBurts;
             FireWeapon();
+        }
+        if (bulletsLeft == 0 && isShooting)
+        {
+            SoundManager.Instance.EmptyMagSoundGlock.Play();
+        }
+        if (AmmoManager.Instance.AmmoCount != null)
+        {
+           AmmoManager.Instance.AmmoCount.text = $"{bulletsLeft / bulletsPerBurts}/{magazineSize / bulletsPerBurts}";
         }
     }
 
     private void FireWeapon()
     {
+        bulletsLeft--;
+
         MuzzleEffect.GetComponent<ParticleSystem>().Play();
         animator.SetTrigger("RECOIL");
-        SoundManager.instance.shootingSoundGlock.Play();
+        SoundManager.Instance.shootingSoundGlock.Play();
 
         readyToShoot = false;
 
@@ -83,6 +104,21 @@ public class Weapon : MonoBehaviour
             BurstBulletsLeft--;
             Invoke("FireWeapon", shootingDelay);
         }
+    }
+
+    private void Reload()
+    {
+        isReloading = true;
+        Invoke("ReloadFinished", reloadTime);
+        animator.SetTrigger("RELOAD");
+        SoundManager.Instance.ReloadSoundGlock.Play();
+
+    }
+
+    private void ReloadFinished()
+    {
+        bulletsLeft = magazineSize;
+        isReloading = false;
     }
 
     private void ResetShot()

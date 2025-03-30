@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
     {
         ContactPoint contact = objectHit.contacts[0];
         GameObject hole = Instantiate(
-            GlobalReff.instance.BulletImpactEffectPrefab,
+            GlobalReff.Instance.BulletImpactEffectPrefab,
             contact.point,
             Quaternion.LookRotation(contact.normal));
 

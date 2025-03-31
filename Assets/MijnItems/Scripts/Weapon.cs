@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public bool IsActiveWeapon;
+
     [SerializeField] private bool isShooting, readyToShoot;
     private bool allowReset = true;
     [SerializeField] private float shootingDelay = 2f;
@@ -20,12 +22,16 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float bulletPrefabLifeTime = 3f;
 
     [SerializeField] private GameObject MuzzleEffect;
-    private Animator animator;
+    internal Animator animator;
 
     [SerializeField] private float reloadTime;
     [SerializeField] private int magazineSize, bulletsLeft;
     public bool isReloading;
-    
+
+    public Vector3 SpawnPosition;  
+    public Vector3 SpawnRotation;
+    public Vector3 SpawnScale;
+
     public enum WeaponType
     {
         Pistol_Glock,
@@ -53,34 +59,39 @@ public class Weapon : MonoBehaviour
 
     void Update()
     {
-        if (currentShootingmode == ShootingMode.Auto)
+        if (IsActiveWeapon)
         {
-            isShooting = Input.GetKey(KeyCode.Mouse0);
-        }
-        else if (currentShootingmode == ShootingMode.Single)
-        {
-            isShooting = Input.GetKeyDown(KeyCode.Mouse0);
-        }
-        else if (currentShootingmode == ShootingMode.Bursts)
-        {
-            isShooting = Input.GetKeyDown(KeyCode.Mouse0);
-        }
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !isReloading)
-        {
-            Reload();
-        }
-        if (readyToShoot && isShooting && bulletsLeft > 0)
-        {
-            BurstBulletsLeft = bulletsPerBurts;
-            FireWeapon();
-        }
-        if (bulletsLeft == 0 && isShooting)
-        {
-            SoundManager.Instance.EmptyMagSound.Play();
-        }
-        if (AmmoManager.Instance.AmmoCount != null)
-        {
-           AmmoManager.Instance.AmmoCount.text = $"{bulletsLeft / bulletsPerBurts}/{magazineSize / bulletsPerBurts}";
+            GetComponent<Outline>().enabled = false;
+
+            if (currentShootingmode == ShootingMode.Auto)
+            {
+                isShooting = Input.GetKey(KeyCode.Mouse0);
+            }
+            else if (currentShootingmode == ShootingMode.Single)
+            {
+                isShooting = Input.GetKeyDown(KeyCode.Mouse0);
+            }
+            else if (currentShootingmode == ShootingMode.Bursts)
+            {
+                isShooting = Input.GetKeyDown(KeyCode.Mouse0);
+            }
+            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !isReloading)
+            {
+                Reload();
+            }
+            if (readyToShoot && isShooting && bulletsLeft > 0)
+            {
+                BurstBulletsLeft = bulletsPerBurts;
+                FireWeapon();
+            }
+            if (bulletsLeft == 0 && isShooting)
+            {
+                SoundManager.Instance.EmptyMagSound.Play();
+            }
+            if (AmmoManager.Instance.AmmoCount != null)
+            {
+                AmmoManager.Instance.AmmoCount.text = $"{bulletsLeft / bulletsPerBurts}/{magazineSize / bulletsPerBurts}";
+            } 
         }
     }
 

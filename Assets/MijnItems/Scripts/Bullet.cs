@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 public class Bullet : MonoBehaviour
 {
     private void OnCollisionEnter(Collision objectHit)

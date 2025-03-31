@@ -386,6 +386,7 @@ GameObject:
   - component: {fileID: 8143663992321166232}
   - component: {fileID: 1688190859587801928}
   - component: {fileID: 2577484242248966696}
+  - component: {fileID: 989818662044981086}
   m_Layer: 0
   m_Name: Pistol_Glock
   m_TagString: Untagged
@@ -447,18 +448,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ea80e5c6e1ca9449c034155a11e6a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
   isShooting: 0
   readyToShoot: 1
-  shootingDelay: 0.4
-  bulletsPerBurts: 0
+  shootingDelay: 0.35
+  bulletsPerBurts: 1
   BurstBulletsLeft: 0
   spreadIntensity: 0.06
   bulletPrefab: {fileID: 2264486607522000812, guid: f5aa385a1062adf40a3e03bf3476fed7, type: 3}
   bulletSpawn: {fileID: 8793190416296925263}
   bulletVelocity: 300
   bulletPrefabLifeTime: 3
+  MuzzleEffect: {fileID: 8691363881704905291, guid: 41853b65fb23abe4a940d82b5c46ebc0, type: 3}
+  reloadTime: 1.5
+  magazineSize: 12
+  bulletsLeft: 0
+  isReloading: 0
   currentShootingmode: 0
+--- !u!95 &989818662044981086
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8416517228431633338}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a3da2ded826923544ba4632350e8b3d1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8871270322010026472
 GameObject:
   m_ObjectHideFlags: 0

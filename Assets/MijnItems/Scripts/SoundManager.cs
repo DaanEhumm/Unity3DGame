@@ -1,11 +1,21 @@
 using UnityEngine;
+using System.Collections;
+using System;
+using static Weapon;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; set; }
-    public AudioSource shootingSoundGlock;
-    public AudioSource ReloadSoundGlock;
-    public AudioSource EmptyMagSoundGlock;
+   
+    public AudioSource ShootingChannel;
+    public AudioSource ReloadChannel;
+
+    public AudioSource EmptyMagSound;
+
+    public AudioClip AR_M4_Shoot;
+    public AudioClip AR_M4_Reload;
+    public AudioClip Pistol_glock_Shoot;
+    public AudioClip Pistol_glock_Reload;
 
     private void Awake()
     {
@@ -16,6 +26,31 @@ public class SoundManager : MonoBehaviour
         else
         {
             Instance = this;
+        }
+    }
+
+    public void PlayShootingSound(WeaponType weapon)
+    {
+        switch (weapon)
+        {
+            case WeaponType.Pistol_Glock:
+                ShootingChannel.PlayOneShot(Pistol_glock_Shoot);
+                break;
+            case WeaponType.AR_M4:
+                ShootingChannel.PlayOneShot(AR_M4_Shoot);
+                break;
+        }
+    }
+    public void PlayReloadSound(WeaponType weapon) 
+    {
+        switch (weapon)
+        {
+            case WeaponType.Pistol_Glock:
+                ReloadChannel.PlayOneShot(Pistol_glock_Reload);
+                break;
+            case WeaponType.AR_M4:
+                ReloadChannel.PlayOneShot(AR_M4_Reload);
+                break;
         }
     }
 }

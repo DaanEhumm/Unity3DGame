@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 public class GlobalReff : MonoBehaviour
 {
     public static GlobalReff Instance { get; set; }

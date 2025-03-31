@@ -25,6 +25,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float reloadTime;
     [SerializeField] private int magazineSize, bulletsLeft;
     public bool isReloading;
+    
+    public enum WeaponType
+    {
+        Pistol_Glock,
+        AR_M4,
+    }
+    public WeaponType thisWeaponType;
 
     public enum ShootingMode
     {
@@ -69,7 +76,7 @@ public class Weapon : MonoBehaviour
         }
         if (bulletsLeft == 0 && isShooting)
         {
-            SoundManager.Instance.EmptyMagSoundGlock.Play();
+            SoundManager.Instance.EmptyMagSound.Play();
         }
         if (AmmoManager.Instance.AmmoCount != null)
         {
@@ -83,7 +90,7 @@ public class Weapon : MonoBehaviour
 
         MuzzleEffect.GetComponent<ParticleSystem>().Play();
         animator.SetTrigger("RECOIL");
-        SoundManager.Instance.shootingSoundGlock.Play();
+        SoundManager.Instance.PlayShootingSound(thisWeaponType);
 
         readyToShoot = false;
 
@@ -111,7 +118,7 @@ public class Weapon : MonoBehaviour
         isReloading = true;
         Invoke("ReloadFinished", reloadTime);
         animator.SetTrigger("RELOAD");
-        SoundManager.Instance.ReloadSoundGlock.Play();
+        SoundManager.Instance.PlayReloadSound(thisWeaponType);
 
     }
 

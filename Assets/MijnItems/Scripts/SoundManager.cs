@@ -9,7 +9,7 @@ public class SoundManager : MonoBehaviour
    
     public AudioSource ShootingChannel;
     public AudioSource ReloadChannel;
-
+    
     public AudioSource EmptyMagSound;
 
     public AudioClip AR_M4_Shoot;

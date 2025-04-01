@@ -160,6 +160,7 @@ public class Weapon : MonoBehaviour
             targetPoint = ray.GetPoint(100);
         }
         Vector3 direction = targetPoint - bulletSpawn.position;
+        //spread
         float x = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
         float y = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
 

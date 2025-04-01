@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     private bool allowReset = true;
     [SerializeField] private float shootingDelay = 2f;
 
-    [SerializeField] private int bulletsPerBurts = 3;
+    [SerializeField] internal int bulletsPerBurts = 3;
     [SerializeField] private int BurstBulletsLeft;
 
     [SerializeField] private float spreadIntensity;
@@ -25,7 +25,7 @@ public class Weapon : MonoBehaviour
     internal Animator animator;
 
     [SerializeField] private float reloadTime;
-    [SerializeField] private int magazineSize, bulletsLeft;
+    [SerializeField] internal int magazineSize, bulletsLeft;
     public bool isReloading;
 
     public Vector3 SpawnPosition;  
@@ -88,10 +88,6 @@ public class Weapon : MonoBehaviour
             {
                 SoundManager.Instance.EmptyMagSound.Play();
             }
-            if (AmmoManager.Instance.AmmoCount != null)
-            {
-                AmmoManager.Instance.AmmoCount.text = $"{bulletsLeft / bulletsPerBurts}/{magazineSize / bulletsPerBurts}";
-            } 
         }
     }
 
@@ -127,6 +123,7 @@ public class Weapon : MonoBehaviour
     private void Reload()
     {
         isReloading = true;
+        readyToShoot = false;
         Invoke("ReloadFinished", reloadTime);
         animator.SetTrigger("RELOAD");
         SoundManager.Instance.PlayReloadSound(thisWeaponType);
@@ -137,6 +134,7 @@ public class Weapon : MonoBehaviour
     {
         bulletsLeft = magazineSize;
         isReloading = false;
+        readyToShoot = true;
     }
 
     private void ResetShot()

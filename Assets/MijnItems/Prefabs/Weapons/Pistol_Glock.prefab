@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 612286651441983496}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5990422459171705612}
   - component: {fileID: 7310178363419388091}
   - component: {fileID: 6175405876894589092}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pistol_B_Receiver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 3210554616861781422}
   - component: {fileID: 9023600632834193411}
   - component: {fileID: 3941474782590243083}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pistol_Glock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 7281072621343456923}
   - component: {fileID: 6708924975532167281}
   - component: {fileID: 9106986754992174594}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pistol_B_Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 568604844448112364}
   - component: {fileID: 6943574082058974246}
   - component: {fileID: 8016440913424433075}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pistol_B_Mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 6004947960429193940}
   - component: {fileID: 4383929603727771918}
   - component: {fileID: 2542837827842914111}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pistol_B_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +522,7 @@ GameObject:
   - component: {fileID: 8391195208483841535}
   - component: {fileID: 1715969739214892350}
   - component: {fileID: 4016773705446565170}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pistol_B_BarrelGuard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -651,7 +651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8691363881704905291, guid: 41853b65fb23abe4a940d82b5c46ebc0, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

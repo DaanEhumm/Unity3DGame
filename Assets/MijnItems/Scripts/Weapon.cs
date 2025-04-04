@@ -26,7 +26,7 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] private float reloadTime;
     [SerializeField] internal int magazineSize, bulletsLeft;
-    public bool isReloading;
+    public bool isReloading = false;
 
     public Vector3 SpawnPosition;  
     public Vector3 SpawnRotation;
@@ -62,7 +62,10 @@ public class Weapon : MonoBehaviour
         if (IsActiveWeapon)
         {
             GetComponent<Outline>().enabled = false;
-
+            if (isReloading)
+            {
+                return;  
+            }
             if (currentShootingmode == ShootingMode.Auto)
             {
                 isShooting = Input.GetKey(KeyCode.Mouse0);
@@ -122,6 +125,8 @@ public class Weapon : MonoBehaviour
 
     private void Reload()
     {
+        if (isReloading) return;
+
         isReloading = true;
         readyToShoot = false;
         Invoke("ReloadFinished", reloadTime);

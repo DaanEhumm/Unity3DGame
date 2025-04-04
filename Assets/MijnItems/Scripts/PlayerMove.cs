@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         right.Normalize();
 
         Vector3 movement = forward * moveInput.y + right * moveInput.x;
-        rb.MovePosition(transform.position + movement * moveSpeed * Time.deltaTime);
+        rb.linearVelocity = new Vector3(movement.x * moveSpeed, rb.linearVelocity.y, movement.z * moveSpeed);
     }
 
     private void Jump()

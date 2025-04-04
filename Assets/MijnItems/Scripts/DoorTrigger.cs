@@ -13,7 +13,7 @@ public class DoorTrigger : MonoBehaviour
         timer = FindFirstObjectByType<Timer>();
         if (timer == null)
         {
-            Debug.LogError("Timer not found in the scene! Please add the Timer script to a GameObject.");
+            Debug.LogError("Timer not found");
         }
     }
 

@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     {
         if (objectHit.gameObject.CompareTag("Target"))
         {
-            print("hit" + objectHit.gameObject.name + "!");
+            print("hit a target");
             CreateBulletImpactEffect(objectHit);
             Destroy(gameObject);
         }

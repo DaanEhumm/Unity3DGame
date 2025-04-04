@@ -8,6 +8,8 @@ TagManager:
   - Wall
   - Beer
   - Target
+  - Bullet
+  - Door
   layers:
   - Default
   - TransparentFX

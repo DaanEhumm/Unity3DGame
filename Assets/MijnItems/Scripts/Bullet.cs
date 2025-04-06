@@ -6,20 +6,24 @@ public class Bullet : MonoBehaviour
     {
         if (objectHit.gameObject.CompareTag("Target"))
         {
+            Score.Instance.AddScore(10);
             print("hit a target");
             CreateBulletImpactEffect(objectHit);
             Destroy(gameObject);
         }
         if (objectHit.gameObject.CompareTag("Wall"))
         {
+            Score.Instance.AddScore(-5);
             print("hit a wall");
             CreateBulletImpactEffect(objectHit);
             Destroy(gameObject);
         }
         if (objectHit.gameObject.CompareTag("Beer"))
         {
+            Score.Instance.AddScore(10);
             print("hit a bottle");
             objectHit.gameObject.GetComponent<BeerBottle>().Shatter();
+            Destroy(gameObject);
         }
     }
 

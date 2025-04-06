@@ -13,5 +13,4 @@ public class BeerBottle : MonoBehaviour
             part.isKinematic = false;
         }
     }
-
 }

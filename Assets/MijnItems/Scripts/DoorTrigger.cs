@@ -6,15 +6,13 @@ public class DoorTrigger : MonoBehaviour
     public bool isFrontDoor = true; 
 
     private Timer timer;
+    private Score score;
     private bool timerStarted = false;
 
     void Start()
     {
         timer = FindFirstObjectByType<Timer>();
-        if (timer == null)
-        {
-            Debug.LogError("Timer not found");
-        }
+        score = FindFirstObjectByType<Score>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -27,8 +25,9 @@ public class DoorTrigger : MonoBehaviour
             {
                 if (!timerStarted)
                 {
+                    score.StartScore();
                     timer.StartTimer();
-                    timerStarted = true; 
+                    timerStarted = true;
                 }
                 foreach (Target target in targets)
                 {
@@ -37,6 +36,7 @@ public class DoorTrigger : MonoBehaviour
             }
             else
             {
+                score.StopScore();
                 timer.StopTimer();
 
                 foreach (Target target in targets)

@@ -36,6 +36,12 @@ public class HudManager : MonoBehaviour
 
     private void Update()
     {
+        UpdateAmmoUI();
+        UpdateWeaponUI();
+    }
+
+    private void UpdateAmmoUI()
+    {
         Weapon activeWeapon = WeaponManager.Instance.ActiveWeaponSlot.GetComponentInChildren<Weapon>();
         Weapon unActiveWeapon = GetUnActiveWeaponSlot().GetComponentInChildren<Weapon>();
 
@@ -63,6 +69,11 @@ public class HudManager : MonoBehaviour
             ActiveWeaponUI.sprite = emptyslot;
             UnActiveWeaponUI.sprite = emptyslot;
         }
+    }
+
+    private void UpdateWeaponUI()
+    {
+        //zit in de updateAmmoUI
     }
 
     private Sprite GetWeaponSprite(Weapon.WeaponType type)

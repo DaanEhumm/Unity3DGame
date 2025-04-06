@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    private Quaternion originalRotation; 
+    private Quaternion originalRotation;
     void Start()
     {
         originalRotation = transform.rotation;

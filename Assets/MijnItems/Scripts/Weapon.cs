@@ -1,21 +1,22 @@
 using System;
 using System.Collections;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
     public bool IsActiveWeapon;
-
+    //shooting
     [SerializeField] private bool isShooting, readyToShoot;
     private bool allowReset = true;
     [SerializeField] private float shootingDelay = 2f;
-
+    //burst
     [SerializeField] internal int bulletsPerBurts = 3;
     [SerializeField] private int BurstBulletsLeft;
-
+    //spread
     [SerializeField] private float spreadIntensity;
-
+    //bullet
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private float bulletVelocity = 30f;
@@ -64,7 +65,7 @@ public class Weapon : MonoBehaviour
             GetComponent<Outline>().enabled = false;
             if (isReloading)
             {
-                return;  
+                return;
             }
             if (currentShootingmode == ShootingMode.Auto)
             {
@@ -78,9 +79,10 @@ public class Weapon : MonoBehaviour
             {
                 isShooting = Input.GetKeyDown(KeyCode.Mouse0);
             }
-            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !isReloading)
+            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !isReloading && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponType) > 0)
             {
                 Reload();
+
             }
             if (readyToShoot && isShooting && bulletsLeft > 0)
             {
@@ -137,9 +139,22 @@ public class Weapon : MonoBehaviour
 
     private void ReloadFinished()
     {
-        bulletsLeft = magazineSize;
-        isReloading = false;
+        int ammoNeeded = magazineSize - bulletsLeft;
+        int ammoAvailable = WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponType);
+
+        if (ammoAvailable >= ammoNeeded)
+        {
+            bulletsLeft = magazineSize;
+            WeaponManager.Instance.DecreaseTotalAmmo(ammoNeeded, thisWeaponType);
+        }
+        else
+        {
+            bulletsLeft += ammoAvailable;
+            WeaponManager.Instance.DecreaseTotalAmmo(ammoAvailable, thisWeaponType);
+        }
+
         readyToShoot = true;
+        isReloading = false;
     }
 
     private void ResetShot()

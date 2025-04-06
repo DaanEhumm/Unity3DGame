@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Weapon;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class WeaponManager : MonoBehaviour
 
     public List<GameObject> weaponSlots;
     public GameObject ActiveWeaponSlot;
+    public int totalRifleAmmo = 0;
+    public int totalPistolAmmo = 0;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -53,9 +56,45 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public void PickUpWeapon(GameObject PickedUpWeapon)
+    internal void PickUpWeapon(GameObject PickedUpWeapon)
     {
         AddWeaponIntoActiveSlot(PickedUpWeapon);
+    }
+    internal void PickUpAmmo(Ammobox ammo)
+    {
+        switch (ammo.ammoType)
+        {
+            case Ammobox.AmmoType.Pistol:
+                totalPistolAmmo += ammo.ammoAmount;
+                break;
+            case Ammobox.AmmoType.Rifle:
+                totalRifleAmmo += ammo.ammoAmount;
+                break;
+        }
+    }
+    internal void DecreaseTotalAmmo(int bulletsToDecrease, Weapon.WeaponType thisWeaponType)
+    {
+        switch (thisWeaponType)
+        {
+            case Weapon.WeaponType.Pistol_Glock:
+                totalPistolAmmo -= bulletsToDecrease;
+                break;
+            case Weapon.WeaponType.AR_M4:
+                totalRifleAmmo -= bulletsToDecrease;
+                break;
+        }
+    }
+    public int CheckAmmoLeftFor(Weapon.WeaponType thisWeaponType)
+    {
+        switch (thisWeaponType)
+        {
+            case WeaponType.Pistol_Glock:
+                return totalPistolAmmo;
+            case WeaponType.AR_M4:
+                return Instance.totalRifleAmmo;
+            default:
+                return 0;
+        }
     }
 
     private void AddWeaponIntoActiveSlot(GameObject pickedUpWeapon)

@@ -6,17 +6,21 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public bool IsActiveWeapon;
-    //shooting
+    internal bool IsActiveWeapon;
+    [Header ("Shooting")]
     [SerializeField] private bool isShooting, readyToShoot;
     private bool allowReset = true;
     [SerializeField] private float shootingDelay = 2f;
     //burst
     [SerializeField] internal int bulletsPerBurts = 3;
     [SerializeField] private int BurstBulletsLeft;
-    //spread
-    [SerializeField] private float spreadIntensity;
-    //bullet
+
+    [Header ("spread")]
+    [SerializeField] private float HipSpreadIntensity;
+    [SerializeField] private float AdsSpreadIntensity;
+    private float spreadIntensity;
+
+    [Header("Bullet")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private float bulletVelocity = 30f;
@@ -25,14 +29,17 @@ public class Weapon : MonoBehaviour
     [SerializeField] private GameObject MuzzleEffect;
     internal Animator animator;
 
+    [Header("Reload")]
     [SerializeField] private float reloadTime;
     [SerializeField] internal int magazineSize, bulletsLeft;
-    public bool isReloading = false;
+    private bool isReloading = false;
+    
+    // weapon spawn 
+    [SerializeField] internal Vector3 SpawnPosition;
+    [SerializeField] internal Vector3 SpawnRotation;
+    [SerializeField] internal Vector3 SpawnScale;
 
-    public Vector3 SpawnPosition;  
-    public Vector3 SpawnRotation;
-    public Vector3 SpawnScale;
-
+    internal bool IsADS;
     public enum WeaponType
     {
         Pistol_Glock,
@@ -56,12 +63,24 @@ public class Weapon : MonoBehaviour
         animator = GetComponent<Animator>();
 
         bulletsLeft = magazineSize;
+        spreadIntensity = HipSpreadIntensity;
     }
 
     void Update()
     {
         if (IsActiveWeapon)
         {
+            if (Input.GetMouseButtonDown(1))
+            {
+                EnterADS();
+            }
+            
+            if (Input.GetMouseButtonUp(1))
+
+            {
+                ExitADS();
+            }
+
             GetComponent<Outline>().enabled = false;
             if (isReloading)
             {
@@ -96,12 +115,42 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    private void EnterADS()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            animator.SetTrigger("EnterADS");
+            IsADS = true;
+            HudManager.Instance.MiddleDot.SetActive(false);
+            spreadIntensity = AdsSpreadIntensity;
+        }
+    }
+    private void ExitADS()
+    {
+        if (Input.GetMouseButtonUp(1))
+
+        {
+            animator.SetTrigger("ExitADS");
+            IsADS = false;
+            HudManager.Instance.MiddleDot.SetActive(true);
+            spreadIntensity = HipSpreadIntensity;
+        }
+    }
+
+
     private void FireWeapon()
     {
         bulletsLeft--;
 
         MuzzleEffect.GetComponent<ParticleSystem>().Play();
-        animator.SetTrigger("RECOIL");
+        if (IsADS)
+        {
+            animator.SetTrigger("RECOIL_ADS");
+        }
+        else
+        {
+            animator.SetTrigger("RECOIL");
+        }
         SoundManager.Instance.PlayShootingSound(thisWeaponType);
 
         readyToShoot = false;

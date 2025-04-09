@@ -21,6 +21,7 @@ public class HudManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI TacticallUI;
 
     [SerializeField] private Sprite emptyslot;
+    [SerializeField] internal GameObject MiddleDot;
 
     private void Awake()
     {

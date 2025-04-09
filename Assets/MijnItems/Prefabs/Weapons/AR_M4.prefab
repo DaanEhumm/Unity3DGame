@@ -973,13 +973,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ea80e5c6e1ca9449c034155a11e6a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsActiveWeapon: 0
   isShooting: 0
-  readyToShoot: 1
+  readyToShoot: 0
   shootingDelay: 0.15
   bulletsPerBurts: 1
   BurstBulletsLeft: 0
-  spreadIntensity: 0.1
+  HipSpreadIntensity: 0.4
+  AdsSpreadIntensity: 0.04
   bulletPrefab: {fileID: 2408181466718790989, guid: 64032bed86f4f37419b16bb867584ce6, type: 3}
   bulletSpawn: {fileID: 2884177845062392943}
   bulletVelocity: 700
@@ -988,7 +988,6 @@ MonoBehaviour:
   reloadTime: 2
   magazineSize: 28
   bulletsLeft: 0
-  isReloading: 0
   SpawnPosition: {x: 0.2026, y: -0.2409999, z: 0.476}
   SpawnRotation: {x: 0, y: 0, z: 0}
   SpawnScale: {x: 1, y: 1, z: 1}

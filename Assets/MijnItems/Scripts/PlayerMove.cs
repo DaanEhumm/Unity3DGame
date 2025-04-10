@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
         Move();
         Jump();
     }
-
+    #region ============== Player Movement ==============
     private void Look()
     {
         Vector2 lookInput = lookAction.ReadValue<Vector2>();
@@ -110,4 +110,5 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = false;
         }
     }
-}
+} 
+#endregion 

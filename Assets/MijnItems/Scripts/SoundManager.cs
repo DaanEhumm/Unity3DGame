@@ -6,19 +6,21 @@ using static Weapon;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; set; }
-    //Weapon
-    public AudioSource ShootingChannel;
-    public AudioSource ReloadChannel;
-    
-    public AudioSource EmptyMagSound;
-    //Weapon specific
-    public AudioClip AR_M4_Shoot;
-    public AudioClip AR_M4_Reload;
-    public AudioClip Pistol_glock_Shoot;
-    public AudioClip Pistol_glock_Reload;
-    //Throwables
-    public AudioSource ThrowablesChannel;
-    public AudioClip GrenadeSound;
+
+    [Header("Weapon")]
+    [SerializeField] internal AudioSource ShootingChannel;
+    [SerializeField] internal AudioSource ReloadChannel;
+    [SerializeField] internal AudioSource EmptyMagSound;
+
+    [Header("Weapon specific")]
+    [SerializeField] internal AudioClip AR_M4_Shoot;
+    [SerializeField] internal AudioClip AR_M4_Reload;
+    [SerializeField] internal AudioClip Pistol_glock_Shoot;
+    [SerializeField] internal AudioClip Pistol_glock_Reload;
+
+    [Header("Throwables")]
+    [SerializeField] internal AudioSource ThrowablesChannel;
+    [SerializeField] internal AudioClip GrenadeSound;
 
     private void Awake()
     {
@@ -32,7 +34,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayShootingSound(WeaponType weapon)
+    internal void PlayShootingSound(WeaponType weapon)
     {
         switch (weapon)
         {
@@ -44,7 +46,7 @@ public class SoundManager : MonoBehaviour
                 break;
         }
     }
-    public void PlayReloadSound(WeaponType weapon) 
+    internal void PlayReloadSound(WeaponType weapon) 
     {
         switch (weapon)
         {

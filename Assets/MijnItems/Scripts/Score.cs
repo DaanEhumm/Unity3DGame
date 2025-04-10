@@ -32,7 +32,7 @@ public class Score : MonoBehaviour
             scoreText.text = "Score: " + score.ToString();
         }
     }
-
+    #region ================= Score =================
     internal void StartScore()
     {
         scoreActive = true;
@@ -53,4 +53,5 @@ public class Score : MonoBehaviour
     {
         return score;
     }
+    #endregion
 }

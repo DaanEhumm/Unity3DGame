@@ -10,21 +10,25 @@ public class WeaponManager : MonoBehaviour
 {
     public static WeaponManager Instance { get; set; }
     // weopon slots 
-    public List<GameObject> weaponSlots;
-    public GameObject ActiveWeaponSlot;
+    [SerializeField] internal List<GameObject> weaponSlots;
+    [SerializeField] internal GameObject ActiveWeaponSlot;
+
     [Header ("Ammo")]
-    public int totalRifleAmmo = 0;
-    public int totalPistolAmmo = 0;
+    [SerializeField] internal int totalRifleAmmo = 0;
+    [SerializeField] internal int totalPistolAmmo = 0;
+
     [Header ("throwables general")]
-    public int throwForce = 15;
-    public GameObject throwableSpawn;
-    public float forceMultiplier = 0f;
-    public float MaxForceMultiplied = 2f;
+    [SerializeField] internal int throwForce = 15;
+    [SerializeField] internal GameObject throwableSpawn;
+    [SerializeField] internal float forceMultiplier = 0f;
+    [SerializeField] internal float MaxForceMultiplied = 2f;
     [Header ( "Lethals")]
-    public int LethalsCount = 0;
-    public Throwables.ThrowableType equippedLethalType;
-    public GameObject grenadePrefab;
-    public int maxLethalsCount = 4;
+
+    [SerializeField] internal int LethalsCount = 0;
+    [SerializeField] internal Throwables.ThrowableType equippedLethalType;
+    [SerializeField] internal GameObject grenadePrefab;
+    [SerializeField] internal int maxLethalsCount = 4;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -85,8 +89,9 @@ public class WeaponManager : MonoBehaviour
             }
             forceMultiplier = 0;
         }
-    }
-    // Throwables
+    } // Dit is een te lange update daar moet ik wat aan doen nog 
+
+    #region ============[throwables]==================
     internal void PickUpThrowables(Throwables throwables)
     {
        switch (throwables.throwableType)
@@ -144,8 +149,9 @@ public class WeaponManager : MonoBehaviour
         return new();
     }
 
+    #endregion throwables
 
-    // Weapon 
+    #region  ============[Weapons]==================
     internal void PickUpWeapon(GameObject PickedUpWeapon)
     {
         AddWeaponIntoActiveSlot(PickedUpWeapon);
@@ -196,7 +202,9 @@ public class WeaponManager : MonoBehaviour
             newWeapon.IsActiveWeapon = true;
         }
     }
-    // Ammo 
+    #endregion weapons
+
+    #region  ============[Ammo]==================
     internal void PickUpAmmo(Ammobox ammo)
     {
         switch (ammo.ammoType)
@@ -233,4 +241,5 @@ public class WeaponManager : MonoBehaviour
                 return 0;
         }
     }
-}   
+    #endregion
+}

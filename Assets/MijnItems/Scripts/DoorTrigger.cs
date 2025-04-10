@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DoorTrigger : MonoBehaviour
 {
-    public bool isFrontDoor = true; 
+    [SerializeField] internal bool isFrontDoor = true; // deze uitzetten bij de "achterdeur"/exit zone
 
     private Timer timer;
     private Score score;

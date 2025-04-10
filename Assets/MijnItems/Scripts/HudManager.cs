@@ -41,7 +41,7 @@ public class HudManager : MonoBehaviour
         UpdateAmmoUI();
         UpdateWeaponUI();
     }
-
+    #region ================= Ammo ================= 
     private void UpdateAmmoUI()
     {
         Weapon activeWeapon = WeaponManager.Instance.ActiveWeaponSlot.GetComponentInChildren<Weapon>();
@@ -78,7 +78,21 @@ public class HudManager : MonoBehaviour
 
         }
     }
+    private Sprite GetAmmoSprite(Weapon.WeaponType type)
+    {
+        switch (type)
+        {
+            case Weapon.WeaponType.Pistol_Glock:
+                return Resources.Load<GameObject>("Pistol_Ammo").GetComponent<SpriteRenderer>().sprite;
+            case Weapon.WeaponType.AR_M4:
+                return Resources.Load<GameObject>("AR_Ammo").GetComponent<SpriteRenderer>().sprite;
+            default:
+                return null;
+        }
+    }
+    #endregion 
 
+    #region ================= Weapons =================
     private void UpdateWeaponUI()
     {
         //zit in de updateAmmoUI
@@ -97,18 +111,7 @@ public class HudManager : MonoBehaviour
         }
     }
 
-    private Sprite GetAmmoSprite(Weapon.WeaponType type)
-    {
-        switch (type)
-        {
-            case Weapon.WeaponType.Pistol_Glock:
-                return Resources.Load<GameObject>("Pistol_Ammo").GetComponent<SpriteRenderer>().sprite;
-            case Weapon.WeaponType.AR_M4:
-                return Resources.Load<GameObject>("AR_Ammo").GetComponent<SpriteRenderer>().sprite;
-            default:
-                return null;
-        }
-    }
+    
 
     private GameObject GetUnActiveWeaponSlot()
     {
@@ -121,6 +124,9 @@ public class HudManager : MonoBehaviour
         }
         return null;
     }
+    #endregion
+
+    #region ================= Throwables =================
     internal void UpdateThrowablesUI()
     {
         LethallUI.text = $"{WeaponManager.Instance.LethalsCount}";
@@ -131,4 +137,5 @@ public class HudManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
 }

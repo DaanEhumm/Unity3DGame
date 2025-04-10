@@ -9,9 +9,10 @@ public class Weapon : MonoBehaviour
     internal bool IsActiveWeapon;
     [Header ("Shooting")]
     [SerializeField] private bool isShooting, readyToShoot;
-    private bool allowReset = true;
     [SerializeField] private float shootingDelay = 2f;
-    //burst
+    private bool allowReset = true;
+
+    [Header(" Only For Burst")] // ik heb nog geen burst wapen, ik zou evt de bestaande ar kunnen aanpassen naar een burst wapen
     [SerializeField] internal int bulletsPerBurts = 3;
     [SerializeField] private int BurstBulletsLeft;
 
@@ -34,7 +35,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] internal int magazineSize, bulletsLeft;
     private bool isReloading = false;
     
-    // weapon spawn 
+    // weapon spawn player na pickup
     [SerializeField] internal Vector3 SpawnPosition;
     [SerializeField] internal Vector3 SpawnRotation;
     [SerializeField] internal Vector3 SpawnScale;
@@ -113,8 +114,9 @@ public class Weapon : MonoBehaviour
                 SoundManager.Instance.EmptyMagSound.Play();
             }
         }
-    }
+    } // Dit is ook een te lange update hier moet ik wat aan doen nog 
 
+    #region ===================[ADS]==================
     private void EnterADS()
     {
         if (Input.GetMouseButtonDown(1))
@@ -136,8 +138,9 @@ public class Weapon : MonoBehaviour
             spreadIntensity = HipSpreadIntensity;
         }
     }
+    #endregion
 
-
+    #region ==================[Shieten & Reloaden]==================
     private void FireWeapon()
     {
         bulletsLeft--;
@@ -233,10 +236,10 @@ public class Weapon : MonoBehaviour
 
         return direction + new Vector3(x, y, 0);
     }
-
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float delay)
     {
         yield return new WaitForSeconds(delay);
         Destroy(bullet);
     }
+#endregion
 }

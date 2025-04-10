@@ -3,21 +3,23 @@ using UnityEngine;
 
 public class Throwables : MonoBehaviour
 {
-    [SerializeField] float delay = 3f;
-    [SerializeField] float damageRadius = 20f;
-    [SerializeField] float èxlosionForce = 1200f;
+    [SerializeField] internal float delay = 3f;
+    [SerializeField] internal float damageRadius = 20f;
+    [SerializeField] internal float èxlosionForce = 1200f;
 
-    float countDown;
-    bool hasExploded = false;
-    public bool hasBeenThrown = false;
+    internal float countDown;
+    internal bool hasExploded = false;
+    internal bool hasBeenThrown = false;
 
-    public enum ThrowableType
+
+    internal enum ThrowableType
     {
         none,
         Grenade
+        // hier komt nog 1 lethal en 1/2 tacticals throwables
     }
 
-    public ThrowableType throwableType;
+    [SerializeField] internal ThrowableType throwableType;
 
     private void Start()
     {
@@ -54,6 +56,7 @@ public class Throwables : MonoBehaviour
                 break;
         }
     }
+    #region ================= Lethal Effects =================
     private void GrenadeEffect()
     {
         // visual
@@ -73,4 +76,9 @@ public class Throwables : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region ================= Tactical Effects =================
+    // Hier komen de effecten van de tactische throwables
+    #endregion
 }

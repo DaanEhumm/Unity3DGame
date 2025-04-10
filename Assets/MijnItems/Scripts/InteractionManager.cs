@@ -6,9 +6,9 @@ public class InteractionManager : MonoBehaviour
 {
     public static InteractionManager Instance { get; set; }
 
-    public Weapon HoveredWeapon = null;
-    public Ammobox HoveredAmmoBox = null;
-    public Throwables HoveredThrowables = null;
+    [SerializeField] internal Weapon HoveredWeapon = null;
+    [SerializeField] internal Ammobox HoveredAmmoBox = null;
+    [SerializeField] internal Throwables HoveredThrowables = null;
 
     private void Awake()
     {
@@ -85,6 +85,6 @@ public class InteractionManager : MonoBehaviour
                 }
             }
         }
-    }
+    } // Ook deze updat eis nog te lang en hier moet ik nog wat aan doen 
 }
     

@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7271213456874811538}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.26362094, y: -0.31417128, z: 0.5862422, w: 0.69865626}
+  m_LocalRotation: {x: 0.2636203, y: -0.3141729, z: 0.58624446, w: 0.6986539}
   m_LocalPosition: {x: 19.119, y: 1.021, z: -6.813}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -153,10 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delay: 3
-  damageRadius: 20
-  "\xE8xlosionForce": 1200
+  damageRadius: 30
+  "\xE8xlosionForce": 1400
   hasBeenThrown: 0
-  throwableType: 0
+  throwableType: 1
 --- !u!114 &-8557252742699655226
 MonoBehaviour:
   m_ObjectHideFlags: 0

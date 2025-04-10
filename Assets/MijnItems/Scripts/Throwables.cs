@@ -45,6 +45,8 @@ public class Throwables : MonoBehaviour
 
     private void getThrowableEffect()
     {
+        Debug.Log(throwableType);
+        
         switch (throwableType)
         {
             case ThrowableType.Grenade:
@@ -55,6 +57,7 @@ public class Throwables : MonoBehaviour
     private void GrenadeEffect()
     {
         // visual
+        Debug.Log("Grenade Exploded");
         GameObject explosionEffect = GlobalReff.Instance.grenadeExplosionEffect;
         Instantiate(explosionEffect, transform.position, transform.rotation);
         SoundManager.Instance.ThrowablesChannel.PlayOneShot(SoundManager.Instance.GrenadeSound);

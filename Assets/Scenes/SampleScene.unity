@@ -3153,10 +3153,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2938236937822750747, guid: 78fff81fcbfa86449af6bdc6e2ab9748, type: 3}
-      propertyPath: throwableType
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7271213456874811538, guid: 78fff81fcbfa86449af6bdc6e2ab9748, type: 3}
       propertyPath: m_Name
       value: Grenade (1)
@@ -6841,7 +6837,7 @@ MonoBehaviour:
   LethalsCount: 0
   equippedLethalType: 0
   grenadePrefab: {fileID: 7271213456874811538, guid: 78fff81fcbfa86449af6bdc6e2ab9748, type: 3}
-  maxLethalsCount: 4
+  maxLethalsCount: 2
 --- !u!4 &2064702632
 Transform:
   m_ObjectHideFlags: 0
@@ -7659,18 +7655,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2938236937822750747, guid: 78fff81fcbfa86449af6bdc6e2ab9748, type: 3}
-      propertyPath: damageRadius
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 2938236937822750747, guid: 78fff81fcbfa86449af6bdc6e2ab9748, type: 3}
-      propertyPath: throwableType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2938236937822750747, guid: 78fff81fcbfa86449af6bdc6e2ab9748, type: 3}
-      propertyPath: "\xE8xlosionForce"
-      value: 1400
-      objectReference: {fileID: 0}
     - target: {fileID: 7271213456874811538, guid: 78fff81fcbfa86449af6bdc6e2ab9748, type: 3}
       propertyPath: m_Name
       value: Grenade

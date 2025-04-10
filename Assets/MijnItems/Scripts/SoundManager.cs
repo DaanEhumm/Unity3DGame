@@ -6,16 +6,19 @@ using static Weapon;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; set; }
-   
+    //Weapon
     public AudioSource ShootingChannel;
     public AudioSource ReloadChannel;
     
     public AudioSource EmptyMagSound;
-
+    //Weapon specific
     public AudioClip AR_M4_Shoot;
     public AudioClip AR_M4_Reload;
     public AudioClip Pistol_glock_Shoot;
     public AudioClip Pistol_glock_Reload;
+    //Throwables
+    public AudioSource ThrowablesChannel;
+    public AudioClip GrenadeSound;
 
     private void Awake()
     {

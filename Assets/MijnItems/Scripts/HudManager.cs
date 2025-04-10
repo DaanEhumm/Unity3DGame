@@ -21,6 +21,7 @@ public class HudManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI TacticallUI;
 
     [SerializeField] private Sprite emptyslot;
+    [SerializeField] private Sprite greyslot;
     [SerializeField] internal GameObject MiddleDot;
 
     private void Awake()
@@ -70,6 +71,12 @@ public class HudManager : MonoBehaviour
             ActiveWeaponUI.sprite = emptyslot;
             UnActiveWeaponUI.sprite = emptyslot;
         }
+        if (WeaponManager.Instance.LethalsCount <=0)
+        {
+            LethalUI.sprite = greyslot;
+            TacticalUI.sprite = greyslot;
+
+        }
     }
 
     private void UpdateWeaponUI()
@@ -113,5 +120,15 @@ public class HudManager : MonoBehaviour
             }
         }
         return null;
+    }
+    internal void UpdateThrowablesUI()
+    {
+        LethallUI.text = $"{WeaponManager.Instance.LethalsCount}";
+        switch (WeaponManager.Instance.equippedLethalType)
+        {
+            case Throwables.ThrowableType.Grenade:
+                LethalUI.sprite = Resources.Load<GameObject>("Grenade").GetComponent<SpriteRenderer>().sprite;
+                break;
+        }
     }
 }

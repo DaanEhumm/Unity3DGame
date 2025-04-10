@@ -2,17 +2,29 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Weapon;
 
 public class WeaponManager : MonoBehaviour
 {
     public static WeaponManager Instance { get; set; }
-
+    // weopon slots 
     public List<GameObject> weaponSlots;
     public GameObject ActiveWeaponSlot;
+    [Header ("Ammo")]
     public int totalRifleAmmo = 0;
     public int totalPistolAmmo = 0;
+    [Header ("throwables general")]
+    public int throwForce = 15;
+    public GameObject throwableSpawn;
+    public float forceMultiplier = 0f;
+    public float MaxForceMultiplied = 2f;
+    [Header ( "Lethals")]
+    public int LethalsCount = 0;
+    public Throwables.ThrowableType equippedLethalType;
+    public GameObject grenadePrefab;
+    public int maxLethalsCount = 4;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,6 +39,7 @@ public class WeaponManager : MonoBehaviour
     private void Start()
     {
         ActiveWeaponSlot = weaponSlots[0];
+        equippedLethalType = Throwables.ThrowableType.none;
     }
 
     private void Update()
@@ -54,47 +67,88 @@ public class WeaponManager : MonoBehaviour
         {
             SwithActiveSlot(1);
         }
+
+        if (Input.GetKey(KeyCode.G))
+        {
+            forceMultiplier += Time.deltaTime;
+            if (forceMultiplier > MaxForceMultiplied)
+            {
+                forceMultiplier = MaxForceMultiplied;
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            if(LethalsCount > 0)
+            {
+                ThrowLethal();
+            }
+            forceMultiplier = 0;
+        }
+    }
+    // Throwables
+    internal void PickUpThrowables(Throwables throwables)
+    {
+       switch (throwables.throwableType)
+        {
+            case Throwables.ThrowableType.Grenade:
+                PickUpThrowablesAsLethal(Throwables.ThrowableType.Grenade);
+                break;
+                //going to add more
+        }
+    }
+    private void PickUpThrowablesAsLethal(Throwables.ThrowableType lethal)
+    {
+        if (equippedLethalType == lethal || equippedLethalType == Throwables.ThrowableType.none)
+        {
+            equippedLethalType = lethal;
+
+            if (LethalsCount != maxLethalsCount)
+            {
+                LethalsCount += 1;
+                Destroy(InteractionManager.Instance.HoveredThrowables.gameObject);
+                HudManager.Instance.UpdateThrowablesUI();
+            }
+            else
+            {
+                Debug.Log ($"Lethal Limit Reached {LethalsCount} {lethal}");
+            }
+        }
+        
     }
 
+    private void ThrowLethal()
+    {
+        GameObject LethalPrefab = GetThrowablePrefab();
+        GameObject throwable = Instantiate(LethalPrefab, throwableSpawn.transform.position, Camera.main.transform.rotation);
+        Rigidbody rb = throwable.GetComponent<Rigidbody>();
+        rb.AddForce(Camera.main.transform.forward * (throwForce * forceMultiplier), ForceMode.Impulse);
+        throwable.GetComponent<Throwables>().hasBeenThrown = true;
+        LethalsCount -= 1;
+        if (LethalsCount <= 0)
+        {
+            equippedLethalType = Throwables.ThrowableType.none;
+        }
+
+
+        HudManager.Instance.UpdateThrowablesUI();
+    }
+
+    private GameObject GetThrowablePrefab()
+    {
+        switch(equippedLethalType)
+        {
+            case Throwables.ThrowableType.Grenade:
+                return grenadePrefab;
+        }
+        return new();
+    }
+
+
+    // Weapon 
     internal void PickUpWeapon(GameObject PickedUpWeapon)
     {
         AddWeaponIntoActiveSlot(PickedUpWeapon);
-    }
-    internal void PickUpAmmo(Ammobox ammo)
-    {
-        switch (ammo.ammoType)
-        {
-            case Ammobox.AmmoType.Pistol:
-                totalPistolAmmo += ammo.ammoAmount;
-                break;
-            case Ammobox.AmmoType.Rifle:
-                totalRifleAmmo += ammo.ammoAmount;
-                break;
-        }
-    }
-    internal void DecreaseTotalAmmo(int bulletsToDecrease, Weapon.WeaponType thisWeaponType)
-    {
-        switch (thisWeaponType)
-        {
-            case Weapon.WeaponType.Pistol_Glock:
-                totalPistolAmmo -= bulletsToDecrease;
-                break;
-            case Weapon.WeaponType.AR_M4:
-                totalRifleAmmo -= bulletsToDecrease;
-                break;
-        }
-    }
-    public int CheckAmmoLeftFor(Weapon.WeaponType thisWeaponType)
-    {
-        switch (thisWeaponType)
-        {
-            case WeaponType.Pistol_Glock:
-                return totalPistolAmmo;
-            case WeaponType.AR_M4:
-                return Instance.totalRifleAmmo;
-            default:
-                return 0;
-        }
     }
 
     private void AddWeaponIntoActiveSlot(GameObject pickedUpWeapon)
@@ -140,6 +194,43 @@ public class WeaponManager : MonoBehaviour
         {
             Weapon newWeapon = ActiveWeaponSlot.transform.GetChild(0).GetComponent<Weapon>();
             newWeapon.IsActiveWeapon = true;
+        }
+    }
+    // Ammo 
+    internal void PickUpAmmo(Ammobox ammo)
+    {
+        switch (ammo.ammoType)
+        {
+            case Ammobox.AmmoType.Pistol:
+                totalPistolAmmo += ammo.ammoAmount;
+                break;
+            case Ammobox.AmmoType.Rifle:
+                totalRifleAmmo += ammo.ammoAmount;
+                break;
+        }
+    }
+    internal void DecreaseTotalAmmo(int bulletsToDecrease, Weapon.WeaponType thisWeaponType)
+    {
+        switch (thisWeaponType)
+        {
+            case Weapon.WeaponType.Pistol_Glock:
+                totalPistolAmmo -= bulletsToDecrease;
+                break;
+            case Weapon.WeaponType.AR_M4:
+                totalRifleAmmo -= bulletsToDecrease;
+                break;
+        }
+    }
+    public int CheckAmmoLeftFor(Weapon.WeaponType thisWeaponType)
+    {
+        switch (thisWeaponType)
+        {
+            case WeaponType.Pistol_Glock:
+                return totalPistolAmmo;
+            case WeaponType.AR_M4:
+                return Instance.totalRifleAmmo;
+            default:
+                return 0;
         }
     }
 }   

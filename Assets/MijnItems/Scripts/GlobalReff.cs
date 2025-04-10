@@ -4,6 +4,7 @@ public class GlobalReff : MonoBehaviour
 {
     public static GlobalReff Instance { get; set; }
     public GameObject BulletImpactEffectPrefab;
+    public GameObject grenadeExplosionEffect;
 
     private void Awake()
     {

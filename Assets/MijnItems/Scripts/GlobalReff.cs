@@ -5,6 +5,7 @@ public class GlobalReff : MonoBehaviour
     public static GlobalReff Instance { get; set; }
     [SerializeField] internal GameObject BulletImpactEffectPrefab;
     [SerializeField] internal GameObject grenadeExplosionEffect;
+    [SerializeField] internal GameObject smokeEffect;
 
     private void Awake()
     {

@@ -127,13 +127,24 @@ public class HudManager : MonoBehaviour
     #endregion
 
     #region ================= Throwables =================
-    internal void UpdateThrowablesUI()
+    internal void UpdatelethalUI()
     {
         LethallUI.text = $"{WeaponManager.Instance.LethalsCount}";
         switch (WeaponManager.Instance.equippedLethalType)
         {
             case Throwables.ThrowableType.Grenade:
                 LethalUI.sprite = Resources.Load<GameObject>("Grenade").GetComponent<SpriteRenderer>().sprite;
+                break;
+        }
+        
+    }
+    internal void UpdateTacticalUI()
+    {
+        TacticallUI.text = $"{WeaponManager.Instance.TacticalsCount}";
+        switch (WeaponManager.Instance.equippedTacticalType)
+        {
+            case Throwables.ThrowableType.Smoke:
+                TacticalUI.sprite = Resources.Load<GameObject>("Smoke").GetComponent<SpriteRenderer>().sprite;
                 break;
         }
     }

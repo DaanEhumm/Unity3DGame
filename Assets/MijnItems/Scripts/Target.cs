@@ -8,12 +8,12 @@ public class Target : MonoBehaviour
         originalRotation = transform.rotation;
     }
 
-    public void RaiseTarget()
+    internal void RaiseTarget()
     {
         transform.rotation = Quaternion.Euler(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
     }
 
-    public void FallTarget()
+    internal void FallTarget()
     {
         transform.rotation = originalRotation;
     }
@@ -23,6 +23,7 @@ public class Target : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             FallTarget();
+            Score.Instance.StopScore();        
         }
     }
 }

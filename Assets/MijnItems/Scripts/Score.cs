@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class Score : MonoBehaviour
 {
@@ -46,7 +47,10 @@ public class Score : MonoBehaviour
 
     internal void AddScore(int points)
     {
-        score += points;
+        if (scoreActive)
+        {
+            score += points;
+        }
     }
 
     internal int GetScore()

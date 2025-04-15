@@ -4,19 +4,24 @@ using UnityEngine;
 public class Throwables : MonoBehaviour
 {
     [SerializeField] internal float delay = 3f;
+    [Header("Grenade")]
     [SerializeField] internal float damageRadius = 20f;
     [SerializeField] internal float èxlosionForce = 1200f;
+    [Header("Smoke")]
+    [SerializeField] internal float smokeDuration = 8f;
+    [SerializeField] internal float smokeRadius = 15f;
 
     internal float countDown;
     internal bool hasExploded = false;
+    internal bool smokeisActive = false;
     internal bool hasBeenThrown = false;
 
 
     internal enum ThrowableType
     {
         none,
-        Grenade
-        // hier komt nog 1 lethal en 1/2 tacticals throwables
+        Grenade,
+        Smoke
     }
 
     [SerializeField] internal ThrowableType throwableType;
@@ -32,13 +37,13 @@ public class Throwables : MonoBehaviour
             countDown -= Time.deltaTime;
             if (countDown <= 0f && !hasExploded)
             {
-                Explode();
+                Detonate();
                 hasExploded = true;
             }
         }
     }
 
-    private void Explode()
+    private void Detonate()
     {
         getThrowableEffect();
 
@@ -53,6 +58,9 @@ public class Throwables : MonoBehaviour
         {
             case ThrowableType.Grenade:
                 GrenadeEffect();
+                break;
+            case ThrowableType.Smoke:
+                SmokeEffect();
                 break;
         }
     }
@@ -79,6 +87,26 @@ public class Throwables : MonoBehaviour
     #endregion
 
     #region ================= Tactical Effects =================
-    // Hier komen de effecten van de tactische throwables
-    #endregion
+        private void SmokeEffect()
+    {
+        Debug.Log("Smoke Exploded");
+
+        GameObject smoke = Instantiate(GlobalReff.Instance.smokeEffect, transform.position, Quaternion.identity);
+        ParticleSystem ps = smoke.GetComponent<ParticleSystem>();
+        SoundManager.Instance.ThrowablesChannel.PlayOneShot(SoundManager.Instance.SmokeSound);
+
+        if (ps != null)
+        {
+            ps.Play();
+            StartCoroutine(StopSmokeAfterDuration(ps, smokeDuration));
+        }
+    }
+
+    private System.Collections.IEnumerator StopSmokeAfterDuration(ParticleSystem ps, float duration = 8f)
+    {
+        yield return new WaitForSeconds(duration);
+        ps.Stop();
+        Destroy(ps.gameObject, 2f);
+    }
 }
+    #endregion

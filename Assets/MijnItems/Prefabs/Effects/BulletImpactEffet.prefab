@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3990554448242003424}
   - component: {fileID: 2916758249084151475}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BulletImpactEffet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 4472773001566833230}
   - component: {fileID: 5321635725346600082}
   - component: {fileID: 1489143742273467321}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BulletHole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 1014769499677797492}
   - component: {fileID: 2634570477383545176}
   - component: {fileID: 2963985986660216439}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: StoneImpactDebris
   m_TagString: Untagged
   m_Icon: {fileID: 0}

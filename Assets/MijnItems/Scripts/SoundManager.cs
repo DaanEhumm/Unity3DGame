@@ -21,6 +21,7 @@ public class SoundManager : MonoBehaviour
     [Header("Throwables")]
     [SerializeField] internal AudioSource ThrowablesChannel;
     [SerializeField] internal AudioClip GrenadeSound;
+    [SerializeField] internal AudioClip SmokeSound;
 
     private void Awake()
     {

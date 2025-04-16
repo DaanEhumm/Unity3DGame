@@ -22,8 +22,7 @@ public class Target : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            FallTarget();
-            Score.Instance.StopScore();        
+            FallTarget();        
         }
     }
 }

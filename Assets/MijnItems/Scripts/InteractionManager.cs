@@ -24,67 +24,99 @@ public class InteractionManager : MonoBehaviour
     private void Update()
     {
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            GameObject objectHitByRaycast = hit.transform.gameObject;
-            //weapon
-            if (objectHitByRaycast.GetComponent<Weapon>() && objectHitByRaycast.GetComponent<Weapon>().IsActiveWeapon == false)
-            {
-                HoveredWeapon = objectHitByRaycast.gameObject.GetComponent<Weapon>();
-                HoveredWeapon.GetComponent<Outline>().enabled = true;
+            GameObject hitObject = hit.transform.gameObject;
 
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    WeaponManager.Instance.PickUpWeapon(objectHitByRaycast.gameObject);
-                }
-            }
-            else
-            {
-                if (HoveredWeapon)
-                {
-                   HoveredWeapon.GetComponent<Outline>().enabled = false;   
-                }
-            }
+            HandleWeaponHighlight(hitObject);
+            HandleAmmoHighlight(hitObject);
+            HandleThrowableHighlight(hitObject);
+        }
+        else
+        {
+            ClearAllHighLights();
+        }
+    }
+    #region ==============[ Voor Update ]===============
+    private void HandleWeaponHighlight(GameObject obj)
+    {
+        Weapon weapon = obj.GetComponent<Weapon>();
+        if (weapon != null && !weapon.IsActiveWeapon)
+        {
+            HoveredWeapon = weapon;
+            HoveredWeapon.GetComponent<Outline>().enabled = true;
 
-            //ammo
-            if (objectHitByRaycast.GetComponent<Ammobox>())
+            if (Input.GetKeyDown(KeyCode.F))
             {
-                HoveredAmmoBox = objectHitByRaycast.gameObject.GetComponent<Ammobox>();
-                HoveredAmmoBox.GetComponent<Outline>().enabled = true;
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    WeaponManager.Instance.PickUpAmmo(HoveredAmmoBox);
-                    Destroy(HoveredAmmoBox.gameObject);
-                }
-            }
-            else
-            {
-                if (HoveredAmmoBox)
-                {
-                    HoveredAmmoBox.GetComponent<Outline>().enabled = false;
-                }
-            }
-
-            //Throwables
-            if (objectHitByRaycast.GetComponent<Throwables>())
-            {
-                HoveredThrowables = objectHitByRaycast.gameObject.GetComponent<Throwables>();
-                HoveredThrowables.GetComponent<Outline>().enabled = true;
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    WeaponManager.Instance.PickUpThrowables(HoveredThrowables);
-                }
-            }
-            else
-            {
-                if (HoveredThrowables)
-                {
-                    HoveredThrowables.GetComponent<Outline>().enabled = false;
-                }
+                WeaponManager.Instance.PickUpWeapon(obj);
             }
         }
-    } // Ook deze updat eis nog te lang en hier moet ik nog wat aan doen 
+        else if (HoveredWeapon != null)
+        {
+            HoveredWeapon.GetComponent<Outline>().enabled = false;
+            HoveredWeapon = null;
+        }
+    }
+    private void HandleAmmoHighlight(GameObject obj)
+    {
+        Ammobox ammo = obj.GetComponent<Ammobox>();
+        if (ammo != null)
+        {
+            HoveredAmmoBox = ammo;
+            HoveredAmmoBox.GetComponent<Outline>().enabled = true;
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                WeaponManager.Instance.PickUpAmmo(HoveredAmmoBox);
+                Destroy(HoveredAmmoBox.gameObject);
+            }
+        }
+        else if (HoveredAmmoBox != null)
+        {
+            HoveredAmmoBox.GetComponent<Outline>().enabled = false;
+            HoveredAmmoBox = null;
+        }
+    }
+
+    private void HandleThrowableHighlight(GameObject obj)
+    {
+        Throwables throwable = obj.GetComponent<Throwables>();
+        if (throwable != null)
+        {
+            HoveredThrowables = throwable;
+            HoveredThrowables.GetComponent<Outline>().enabled = true;
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                WeaponManager.Instance.PickUpThrowables(HoveredThrowables);
+            }
+        }
+        else if (HoveredThrowables != null)
+        {
+            HoveredThrowables.GetComponent<Outline>().enabled = false;
+            HoveredThrowables = null;
+        }
+    }
+
+    private void ClearAllHighLights()
+    {
+        if (HoveredWeapon != null)
+        {
+            HoveredWeapon.GetComponent<Outline>().enabled = false;
+            HoveredWeapon = null;
+        }
+
+        if (HoveredAmmoBox != null)
+        {
+            HoveredAmmoBox.GetComponent<Outline>().enabled = false;
+            HoveredAmmoBox = null;
+        }
+
+        if (HoveredThrowables != null)
+        {
+            HoveredThrowables.GetComponent<Outline>().enabled = false;
+            HoveredThrowables = null;
+        }
+    }
+    #endregion Update
 }
-    

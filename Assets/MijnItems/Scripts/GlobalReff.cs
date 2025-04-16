@@ -3,6 +3,7 @@ using UnityEngine;
 public class GlobalReff : MonoBehaviour
 {
     public static GlobalReff Instance { get; set; }
+    [Header("Effects")]
     [SerializeField] internal GameObject BulletImpactEffectPrefab;
     [SerializeField] internal GameObject grenadeExplosionEffect;
     [SerializeField] internal GameObject smokeEffect;

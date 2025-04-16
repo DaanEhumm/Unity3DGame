@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Throwables : MonoBehaviour
@@ -8,8 +10,7 @@ public class Throwables : MonoBehaviour
     [SerializeField] internal float damageRadius = 20f;
     [SerializeField] internal float èxlosionForce = 1200f;
     [Header("Smoke")]
-    [SerializeField] internal float smokeDuration = 8f;
-    [SerializeField] internal float smokeRadius = 15f;
+    [SerializeField] internal float smokeDuration = 6f;
 
     internal float countDown;
     internal bool hasExploded = false;
@@ -87,26 +88,39 @@ public class Throwables : MonoBehaviour
     #endregion
 
     #region ================= Tactical Effects =================
-        private void SmokeEffect()
+    private void SmokeEffect()
     {
         Debug.Log("Smoke Exploded");
 
-        GameObject smoke = Instantiate(GlobalReff.Instance.smokeEffect, transform.position, Quaternion.identity);
-        ParticleSystem ps = smoke.GetComponent<ParticleSystem>();
+        GameObject smokeFX = Instantiate(GlobalReff.Instance.smokeEffect, transform.position, Quaternion.identity);
+
+        ParticleSystem ps = smokeFX.GetComponent<ParticleSystem>();
+        if (ps == null)
+        {
+            ps = smokeFX.GetComponentInChildren<ParticleSystem>();
+        }
+
+        // Speel geluid af
         SoundManager.Instance.ThrowablesChannel.PlayOneShot(SoundManager.Instance.SmokeSound);
 
         if (ps != null)
         {
             ps.Play();
-            StartCoroutine(StopSmokeAfterDuration(ps, smokeDuration));
+            StartCoroutine(StopSmokeAfterDuration(ps, smokeFX));
+        }
+        else
+        {
+            Debug.LogWarning(" Geen ParticleSystem gevonden effect prefab!");
         }
     }
 
-    private System.Collections.IEnumerator StopSmokeAfterDuration(ParticleSystem ps, float duration = 8f)
+    private IEnumerator StopSmokeAfterDuration(ParticleSystem ps, GameObject smokeObject)
     {
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(smokeDuration);
+
         ps.Stop();
-        Destroy(ps.gameObject, 2f);
+
+        Destroy(smokeObject, 2f);
     }
 }
     #endregion

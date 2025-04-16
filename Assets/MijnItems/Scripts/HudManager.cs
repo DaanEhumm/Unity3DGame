@@ -7,19 +7,22 @@ using System;
 public class HudManager : MonoBehaviour
 {
     public static HudManager Instance { get; set; }
-    //ammo
+    [Header ("ammo")]    
     [SerializeField] private TextMeshProUGUI MagazineAmmoUI;
     [SerializeField] private TextMeshProUGUI TotalAmmoUI;
     [SerializeField] private Image AmmoTypeUI;
-    //weapon
+
+    [Header("Weapons")]
     [SerializeField] private Image ActiveWeaponUI;
     [SerializeField] private Image UnActiveWeaponUI;
-    //Throwables
+
+    [Header("Throwables")]
     [SerializeField] private Image LethalUI;
     [SerializeField] private TextMeshProUGUI LethallUI;
     [SerializeField] private Image TacticalUI;
     [SerializeField] private TextMeshProUGUI TacticallUI;
 
+    [Header("General")]
     [SerializeField] private Sprite emptyslot;
     [SerializeField] private Sprite greyslot;
     [SerializeField] internal GameObject MiddleDot;
@@ -40,6 +43,8 @@ public class HudManager : MonoBehaviour
     {
         UpdateAmmoUI();
         UpdateWeaponUI();
+        UpdateTacticalUI();
+        UpdatelethalUI();
     }
     #region ================= Ammo ================= 
     private void UpdateAmmoUI()

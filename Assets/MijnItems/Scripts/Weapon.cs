@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float shootingDelay = 2f;
     private bool allowReset = true;
 
-    [Header(" Only For Burst")] // ik heb nog geen burst wapen, ik zou evt de bestaande ar kunnen aanpassen naar een burst wapen
+    [Header(" Only For Burst")] // ik heb nog geen burst wapen, ik zou evt de bestaande AR kunnen aanpassen naar een burst wapen
     [SerializeField] internal int bulletsPerBurts = 3;
     [SerializeField] private int BurstBulletsLeft;
 
@@ -34,8 +34,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float reloadTime;
     [SerializeField] internal int magazineSize, bulletsLeft;
     private bool isReloading = false;
-    
-    // weapon spawn player na pickup
+
+    [Header("WeaponSpawn")]
     [SerializeField] internal Vector3 SpawnPosition;
     [SerializeField] internal Vector3 SpawnRotation;
     [SerializeField] internal Vector3 SpawnScale;
@@ -66,55 +66,67 @@ public class Weapon : MonoBehaviour
         bulletsLeft = magazineSize;
         spreadIntensity = HipSpreadIntensity;
     }
-
     void Update()
     {
-        if (IsActiveWeapon)
+        if (!IsActiveWeapon) return;
+
+        HandleADSInput();
+        if (isReloading) return;
+
+        HandleShootingInput();
+        HandleReloadInput();
+        HandleFiring();
+        HandleEmptyMagSound();
+    }
+    #region ==============[ Voor Update ]===============
+    private void HandleADSInput()
+    {
+        if (Input.GetMouseButtonDown(1)) EnterADS();
+        if (Input.GetMouseButtonUp(1)) ExitADS();
+    }
+
+    private void HandleShootingInput()
+    {
+        switch (currentShootingmode)
         {
-            if (Input.GetMouseButtonDown(1))
-            {
-                EnterADS();
-            }
-            
-            if (Input.GetMouseButtonUp(1))
-
-            {
-                ExitADS();
-            }
-
-            GetComponent<Outline>().enabled = false;
-            if (isReloading)
-            {
-                return;
-            }
-            if (currentShootingmode == ShootingMode.Auto)
-            {
+            case ShootingMode.Auto:
                 isShooting = Input.GetKey(KeyCode.Mouse0);
-            }
-            else if (currentShootingmode == ShootingMode.Single)
-            {
+                break;
+            case ShootingMode.Single:
+            case ShootingMode.Bursts:
                 isShooting = Input.GetKeyDown(KeyCode.Mouse0);
-            }
-            else if (currentShootingmode == ShootingMode.Bursts)
-            {
-                isShooting = Input.GetKeyDown(KeyCode.Mouse0);
-            }
-            if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !isReloading && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponType) > 0)
-            {
-                Reload();
-
-            }
-            if (readyToShoot && isShooting && bulletsLeft > 0)
-            {
-                BurstBulletsLeft = bulletsPerBurts;
-                FireWeapon();
-            }
-            if (bulletsLeft == 0 && isShooting)
-            {
-                SoundManager.Instance.EmptyMagSound.Play();
-            }
+                break;
         }
-    } // Dit is ook een te lange update hier moet ik wat aan doen nog 
+    }
+
+    private void HandleReloadInput()
+    {
+        bool needsReload = bulletsLeft < magazineSize;
+        bool hasAmmo = WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponType) > 0;
+
+        if (Input.GetKeyDown(KeyCode.R) && needsReload && !isReloading && hasAmmo)
+        {
+            Reload();
+        }
+    }
+
+    private void HandleFiring()
+    {
+        if (readyToShoot && isShooting && bulletsLeft > 0)
+        {
+            BurstBulletsLeft = bulletsPerBurts;
+            FireWeapon();
+        }
+    }
+
+    private void HandleEmptyMagSound()
+    {
+        if (bulletsLeft == 0 && isShooting)
+        {
+            SoundManager.Instance.EmptyMagSound.Play();
+        }
+    }
+    #endregion Update
 
     #region ===================[ADS]==================
     private void EnterADS()

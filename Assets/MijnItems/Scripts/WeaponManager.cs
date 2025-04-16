@@ -9,7 +9,7 @@ using static Weapon;
 public class WeaponManager : MonoBehaviour
 {
     public static WeaponManager Instance { get; set; }
-    // weopon slots 
+    [Header("WeaponSlots")]
     [SerializeField] internal List<GameObject> weaponSlots;
     [SerializeField] internal GameObject ActiveWeaponSlot;
 
@@ -52,7 +52,6 @@ public class WeaponManager : MonoBehaviour
         equippedLethalType = Throwables.ThrowableType.none;
         equippedTacticalType = Throwables.ThrowableType.none;
     }
-
     private void Update()
     {
         foreach (GameObject weaponSlot in weaponSlots)
@@ -69,51 +68,36 @@ public class WeaponManager : MonoBehaviour
 
             }
         }
+        HandleWeaponSwitch();
+        HandleLethalInput();
+        HandleTacticalInput();
+    }
+    #region ============[ Voor Update ]============
+    private void HandleWeaponSwitch()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SwithActiveSlot(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SwithActiveSlot(1);
+    }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SwithActiveSlot(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SwithActiveSlot(1);
-        }
-        //lethal
-        if (Input.GetKey(KeyCode.G))
-        {
-            forceMultiplier += Time.deltaTime;
-            if (forceMultiplier > MaxForceMultiplied)
-            {
-                forceMultiplier = MaxForceMultiplied;
-            }
-        }
+    private void HandleLethalInput()
+    {
+        if (Input.GetKey(KeyCode.G)) IncreaseForceMultiplier();
+        if (Input.GetKeyUp(KeyCode.G) && LethalsCount > 0) ThrowLethal();
+    }
 
-        if (Input.GetKeyUp(KeyCode.G))
-        {
-            if(LethalsCount > 0)
-            {
-                ThrowLethal();
-            }
-            forceMultiplier = 0;
-        }
-        //Tactical
-        if (Input.GetKey(KeyCode.T))
-        {
-            forceMultiplier += Time.deltaTime;
-            if (forceMultiplier > MaxForceMultiplied)
-            {
-                forceMultiplier = MaxForceMultiplied;
-            }
-        }
-        if (Input.GetKeyUp(KeyCode.T))
-        {
-            if (TacticalsCount > 0)
-            {
-                ThrowTactical();
-            }
-            forceMultiplier = 0;
-        }
-    } // Dit is een te lange update daar moet ik wat aan doen nog 
+    private void HandleTacticalInput()
+    {
+        if (Input.GetKey(KeyCode.T)) IncreaseForceMultiplier();
+        if (Input.GetKeyUp(KeyCode.T) && TacticalsCount > 0) ThrowTactical();
+    }
+
+    private void IncreaseForceMultiplier()
+    {
+        forceMultiplier += Time.deltaTime;
+        if (forceMultiplier > MaxForceMultiplied)
+            forceMultiplier = MaxForceMultiplied;
+    }
+    #endregion Update
 
     #region ============[throwables]==================
     internal void PickUpThrowables(Throwables throwables)
@@ -151,7 +135,7 @@ public class WeaponManager : MonoBehaviour
 
     private void ThrowLethal()
     {
-        GameObject LethalPrefab = GetThrowablePrefab();
+        GameObject LethalPrefab = GetLethalPrefab();
         GameObject throwable = Instantiate(LethalPrefab, throwableSpawn.transform.position, Camera.main.transform.rotation);
         Rigidbody rb = throwable.GetComponent<Rigidbody>();
         rb.AddForce(Camera.main.transform.forward * (throwForce * forceMultiplier), ForceMode.Impulse);
@@ -164,6 +148,16 @@ public class WeaponManager : MonoBehaviour
 
 
         HudManager.Instance.UpdatelethalUI();
+    }
+    private GameObject GetLethalPrefab()
+    {
+        switch (equippedLethalType)
+        {
+            case Throwables.ThrowableType.Grenade:
+                return grenadePrefab;
+            default:
+                return null;
+        }
     }
     //Tactical
     private void PickUpThrowablesAsTactical(Throwables.ThrowableType tactical)
@@ -185,7 +179,7 @@ public class WeaponManager : MonoBehaviour
     }
     private void ThrowTactical()
     {
-        GameObject TacticalPrefab = GetThrowablePrefab();
+        GameObject TacticalPrefab = GetTacticalPrefab();
         GameObject throwable = Instantiate(TacticalPrefab, throwableSpawn.transform.position, Camera.main.transform.rotation);
         Rigidbody rb = throwable.GetComponent<Rigidbody>();
         rb.AddForce(Camera.main.transform.forward * (throwForce * forceMultiplier), ForceMode.Impulse);
@@ -197,22 +191,15 @@ public class WeaponManager : MonoBehaviour
         }
         HudManager.Instance.UpdateTacticalUI();
     }
-
-    private GameObject GetThrowablePrefab()
+    private GameObject GetTacticalPrefab()
     {
-        switch(equippedLethalType)
-        {
-            case Throwables.ThrowableType.Grenade:
-                return grenadePrefab;
-        }
         switch (equippedTacticalType)
         {
             case Throwables.ThrowableType.Smoke:
                 return smokePrefab;
-                default:
-                break;
+            default:
+                return null;
         }
-        return new();
     }
 
     #endregion throwables
@@ -270,7 +257,7 @@ public class WeaponManager : MonoBehaviour
     }
     #endregion weapons
 
-    #region  ============[Ammo]==================
+    #region  ============[Ammo]==============
     internal void PickUpAmmo(Ammobox ammo)
     {
         switch (ammo.ammoType)

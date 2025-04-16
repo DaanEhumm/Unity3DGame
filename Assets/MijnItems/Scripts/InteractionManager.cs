@@ -31,6 +31,7 @@ public class InteractionManager : MonoBehaviour
             HandleWeaponHighlight(hitObject);
             HandleAmmoHighlight(hitObject);
             HandleThrowableHighlight(hitObject);
+
         }
         else
         {
@@ -45,16 +46,19 @@ public class InteractionManager : MonoBehaviour
         {
             HoveredWeapon = weapon;
             HoveredWeapon.GetComponent<Outline>().enabled = true;
+            HudManager.Instance.ShowInteractionText("Press F to Pickup Weapon");
 
             if (Input.GetKeyDown(KeyCode.F))
             {
                 WeaponManager.Instance.PickUpWeapon(obj);
+                HudManager.Instance.HideInteractionText();
             }
         }
         else if (HoveredWeapon != null)
         {
             HoveredWeapon.GetComponent<Outline>().enabled = false;
             HoveredWeapon = null;
+            HudManager.Instance.HideInteractionText();
         }
     }
     private void HandleAmmoHighlight(GameObject obj)
@@ -64,17 +68,20 @@ public class InteractionManager : MonoBehaviour
         {
             HoveredAmmoBox = ammo;
             HoveredAmmoBox.GetComponent<Outline>().enabled = true;
+            HudManager.Instance.ShowInteractionText("Press F to Pickup Ammo");
 
             if (Input.GetKeyDown(KeyCode.F))
             {
                 WeaponManager.Instance.PickUpAmmo(HoveredAmmoBox);
                 Destroy(HoveredAmmoBox.gameObject);
+                HudManager.Instance.HideInteractionText();
             }
         }
         else if (HoveredAmmoBox != null)
         {
             HoveredAmmoBox.GetComponent<Outline>().enabled = false;
             HoveredAmmoBox = null;
+            HudManager.Instance.HideInteractionText();
         }
     }
 
@@ -85,16 +92,19 @@ public class InteractionManager : MonoBehaviour
         {
             HoveredThrowables = throwable;
             HoveredThrowables.GetComponent<Outline>().enabled = true;
+            HudManager.Instance.ShowInteractionText("Press F to Pickup Throwable");
 
             if (Input.GetKeyDown(KeyCode.F))
             {
                 WeaponManager.Instance.PickUpThrowables(HoveredThrowables);
+                HudManager.Instance.HideInteractionText();
             }
         }
         else if (HoveredThrowables != null)
         {
             HoveredThrowables.GetComponent<Outline>().enabled = false;
             HoveredThrowables = null;
+            HudManager.Instance.HideInteractionText();
         }
     }
 
@@ -117,6 +127,7 @@ public class InteractionManager : MonoBehaviour
             HoveredThrowables.GetComponent<Outline>().enabled = false;
             HoveredThrowables = null;
         }
+        HudManager.Instance.HideInteractionText();
     }
     #endregion Update
 }

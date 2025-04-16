@@ -23,6 +23,7 @@ public class HudManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI TacticallUI;
 
     [Header("General")]
+    [SerializeField] private TextMeshProUGUI InteractionText;
     [SerializeField] private Sprite emptyslot;
     [SerializeField] private Sprite greyslot;
     [SerializeField] internal GameObject MiddleDot;
@@ -37,6 +38,7 @@ public class HudManager : MonoBehaviour
         {
             Instance = this;
         }
+        HideInteractionText();
     }
 
     private void Update()
@@ -154,4 +156,15 @@ public class HudManager : MonoBehaviour
         }
     }
     #endregion
+
+    public void ShowInteractionText(string text)
+    {
+        InteractionText.text = text;
+        InteractionText.gameObject.SetActive(true);
+    }
+    public void HideInteractionText()
+    {
+        InteractionText.gameObject.SetActive(false);
+    }
+
 }

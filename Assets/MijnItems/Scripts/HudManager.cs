@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class HudManager : MonoBehaviour
 {
@@ -157,12 +158,12 @@ public class HudManager : MonoBehaviour
     }
     #endregion
 
-    public void ShowInteractionText(string text)
+    internal void ShowInteractionText(string text)
     {
         InteractionText.text = text;
         InteractionText.gameObject.SetActive(true);
     }
-    public void HideInteractionText()
+    internal void HideInteractionText()
     {
         InteractionText.gameObject.SetActive(false);
     }

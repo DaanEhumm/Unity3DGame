@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
         }
         if (objectHit.gameObject.CompareTag("Beer"))
         {
-            Score.Instance.AddScore(10);
+            Score.Instance.AddScore(15);
             print("hit a bottle");
             objectHit.gameObject.GetComponent<BeerBottle>().Shatter();
             Destroy(gameObject);

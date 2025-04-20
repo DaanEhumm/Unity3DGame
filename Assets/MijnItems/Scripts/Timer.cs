@@ -9,6 +9,7 @@ public class Timer : MonoBehaviour
     private float timeElapsed = 0f;
     private bool timerRunning = false;
 
+    internal float TimeElapsed => timeElapsed;
     private void Start()
     {
         timerText.gameObject.SetActive(false);
@@ -31,5 +32,9 @@ public class Timer : MonoBehaviour
     public void StopTimer()
     {
         timerRunning = false;
+    }
+    public float GetCurrentTime()
+    {
+        return timeElapsed;
     }
 }

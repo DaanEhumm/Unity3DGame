@@ -1,8 +1,10 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField] internal TMP_InputField usernameInput;
     private void Start()
     {
         Cursor.lockState = CursorLockMode.None; 
@@ -11,19 +13,19 @@ public class MenuManager : MonoBehaviour
 
     internal void PlayGame()
     {
-        SceneManager.LoadScene("GameScene"); 
+        PlayerPrefs.SetString("username", usernameInput.text);
+        SceneManager.LoadScene("GameScene");
     }
-
-    public void OpenLeaderboard()
+    internal void OpenLeaderboard()
     {
         SceneManager.LoadScene("LeaderboardScene"); 
     }
 
-    public void OpenRules()
+    internal void OpenRules()
     {
         SceneManager.LoadScene("RulesScene"); 
     }
-    public void OpenMenu()
+    internal void OpenMenu()
     {
         SceneManager.LoadScene("MenuScene");
     }

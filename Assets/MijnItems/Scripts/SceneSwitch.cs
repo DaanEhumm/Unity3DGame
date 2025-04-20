@@ -10,5 +10,9 @@ public class SceneSwitch : MonoBehaviour
         {
             SceneManager.LoadScene("MenuScene");
         }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SceneManager.LoadScene("GameScene");
+        }
     }
 }

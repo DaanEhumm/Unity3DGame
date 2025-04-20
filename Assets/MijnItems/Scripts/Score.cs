@@ -53,9 +53,7 @@ public class Score : MonoBehaviour
         }
     }
 
-    internal int GetScore()
-    {
-        return score;
-    }
+    internal int GetScore() => score;
+
     #endregion
 }

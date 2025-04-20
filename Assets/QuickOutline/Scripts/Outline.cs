@@ -112,24 +112,26 @@ public class Outline : MonoBehaviour {
     }
   }
 
-  void OnValidate() {
+    void OnValidate()
+    {
+#if UNITY_EDITOR
+        needsUpdate = true;
 
-    // Update material properties
-    needsUpdate = true;
+        if (!precomputeOutline && bakeKeys.Count != 0 || bakeKeys.Count != bakeValues.Count)
+        {
+            bakeKeys.Clear();
+            bakeValues.Clear();
+        }
 
-    // Clear cache when baking is disabled or corrupted
-    if (!precomputeOutline && bakeKeys.Count != 0 || bakeKeys.Count != bakeValues.Count) {
-      bakeKeys.Clear();
-      bakeValues.Clear();
+        if (precomputeOutline && bakeKeys.Count == 0)
+        {
+            Bake();
+        }
+#endif
     }
 
-    // Generate smooth normals when baking is enabled
-    if (precomputeOutline && bakeKeys.Count == 0) {
-      Bake();
-    }
-  }
 
-  void Update() {
+    void Update() {
     if (needsUpdate) {
       needsUpdate = false;
 
@@ -177,48 +179,54 @@ public class Outline : MonoBehaviour {
     }
   }
 
-  void LoadSmoothNormals() {
+    void LoadSmoothNormals()
+    {
+        foreach (var meshFilter in GetComponentsInChildren<MeshFilter>())
+        {
+            Mesh originalMesh = meshFilter.sharedMesh;
 
-    // Retrieve or generate smooth normals
-    foreach (var meshFilter in GetComponentsInChildren<MeshFilter>()) {
+            // Clone mesh first
+            Mesh clonedMesh = Instantiate(originalMesh);
+            meshFilter.sharedMesh = clonedMesh;
 
-      // Skip if smooth normals have already been adopted
-      if (!registeredMeshes.Add(meshFilter.sharedMesh)) {
-        continue;
-      }
+            // Retrieve or generate smooth normals
+            var index = bakeKeys.IndexOf(originalMesh);
+            var smoothNormals = (index >= 0) ? bakeValues[index].data : SmoothNormals(clonedMesh);
 
-      // Retrieve or generate smooth normals
-      var index = bakeKeys.IndexOf(meshFilter.sharedMesh);
-      var smoothNormals = (index >= 0) ? bakeValues[index].data : SmoothNormals(meshFilter.sharedMesh);
+            // Store smooth normals in UV3
+            clonedMesh.SetUVs(3, smoothNormals);
 
-      // Store smooth normals in UV3
-      meshFilter.sharedMesh.SetUVs(3, smoothNormals);
+            // Combine submeshes
+            var renderer = meshFilter.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                CombineSubmeshes(clonedMesh, renderer.sharedMaterials);
+            }
 
-      // Combine submeshes
-      var renderer = meshFilter.GetComponent<Renderer>();
+            // Register after cloning
+            registeredMeshes.Add(clonedMesh);
+        }
 
-      if (renderer != null) {
-        CombineSubmeshes(meshFilter.sharedMesh, renderer.sharedMaterials);
-      }
+        foreach (var skinnedMeshRenderer in GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            Mesh originalMesh = skinnedMeshRenderer.sharedMesh;
+
+            // Clone mesh first
+            Mesh clonedMesh = Instantiate(originalMesh);
+            skinnedMeshRenderer.sharedMesh = clonedMesh;
+
+            // Clear UV4
+            clonedMesh.uv4 = new Vector2[clonedMesh.vertexCount];
+
+            // Combine submeshes
+            CombineSubmeshes(clonedMesh, skinnedMeshRenderer.sharedMaterials);
+
+            // Register after cloning
+            registeredMeshes.Add(clonedMesh);
+        }
     }
 
-    // Clear UV3 on skinned mesh renderers
-    foreach (var skinnedMeshRenderer in GetComponentsInChildren<SkinnedMeshRenderer>()) {
-
-      // Skip if UV3 has already been reset
-      if (!registeredMeshes.Add(skinnedMeshRenderer.sharedMesh)) {
-        continue;
-      }
-
-      // Clear UV3
-      skinnedMeshRenderer.sharedMesh.uv4 = new Vector2[skinnedMeshRenderer.sharedMesh.vertexCount];
-
-      // Combine submeshes
-      CombineSubmeshes(skinnedMeshRenderer.sharedMesh, skinnedMeshRenderer.sharedMaterials);
-    }
-  }
-
-  List<Vector3> SmoothNormals(Mesh mesh) {
+    List<Vector3> SmoothNormals(Mesh mesh) {
 
     // Group vertices by location
     var groups = mesh.vertices.Select((vertex, index) => new KeyValuePair<Vector3, int>(vertex, index)).GroupBy(pair => pair.Key);

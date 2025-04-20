@@ -9,6 +9,7 @@ public class DoorTrigger : MonoBehaviour
     private Score score;
     private bool timerStarted = false;
 
+
     void Start()
     {
         timer = FindFirstObjectByType<Timer>();
@@ -44,6 +45,14 @@ public class DoorTrigger : MonoBehaviour
                     target.FallTarget();
                 }
 
+                PlayerData data = new PlayerData
+                {
+                    username = PlayerPrefs.GetString("username", "Unknown"),
+                    score = score.GetScore(),
+                    time = timer.TimeElapsed
+                };
+
+                LeaderboardStorage.SaveScore(data);
                 timerStarted = false;
             }
         }
